@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="EvoX Garage Jetsonの個人用Google Drive連携アプリについて">
+  <title>EvoX Garage Jetson</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main>
+    <header>
+      <p class="eyebrow">PERSONAL PROJECT · JETSON NANO</p>
+      <h1>EvoX Garage Jetson</h1>
+      <p class="lead">Google Drive上の選択した車両ログファイルをJetson Nanoで読み取り、検証・解析する個人用ツールです。</p>
+    </header>
+    <section aria-labelledby="purpose">
+      <h2 id="purpose">用途</h2>
+      <p>rcloneを使い、Google Drive APIの読み取り専用スコープ（<code>drive.readonly</code>）でファイルを取得します。このスコープは技術上Drive内のファイルを広く読み取れる権限です。運用では、所有者が選択したファイルだけを対象にします。現在の認証確認では合成テストJSONだけを扱い、実車データの取得は別途承認されるまで行いません。</p>
+      <p>Drive上のファイルは読み取り専用で扱い、元ファイルを変更・削除・共有しません。</p>
+    </section>
+    <section aria-labelledby="flow">
+      <h2 id="flow">データの流れと保存先</h2>
+      <ol>
+        <li>選択したDriveファイルを、所有者が管理するJetson Nanoへ取得します。</li>
+        <li>検証・解析はJetson Nano上で行います。取得ファイルと作業用データはJetsonのローカルストレージに置かれ、所有者が管理・削除します。</li>
+        <li>連携を有効にした場合、解析で生成したJSONのみを認証付きWorker API経由でEvoX Garageの隔離されたSTAGING環境へ送り、表示用キャッシュとしてCloudflare R2に保存します。公開Site v81や本番R2には送りません。</li>
+      </ol>
+      <p>Google Driveの元ファイルは正本としてDriveに残り、変更しません。STAGING連携ではCloudflareが保管基盤の提供者として派生JSONを処理します。Google Driveの元ファイルをCloudflareへ転送する設計ではありません。</p>
+    </section>
+    <section aria-labelledby="sharing">
+      <h2 id="sharing">共有・第三者提供</h2>
+      <p>データを販売したり、広告・プロファイリングに利用したりしません。Driveの元ファイルを第三者に共有しません。STAGING連携を実行した場合に限り、Jetsonで生成した派生JSONがEvoX Garage STAGINGおよびその保管基盤（Cloudflare R2）に渡ります。STAGINGは開発・確認用であり、本番サービスとは分離しています。</p>
+      <p>OAuthトークンとクライアント資格情報はローカルのJetsonで所有者権限により保護し、ソースコードやログ、公開ページには含めません。</p>
+    </section>
+    <section aria-labelledby="contact">
+      <h2 id="contact">問い合わせ</h2>
+      <p>アプリのサポート連絡先はGoogle OAuth同意画面に表示されるプロジェクトのサポートメールです。</p>
+    </section>
+    <footer>
+      <a href="privacy.html">プライバシーポリシー</a>
+      <p>最終更新日：2026年10月14日</p>
+    </footer>
+  </main>
+</body>
+</html>
